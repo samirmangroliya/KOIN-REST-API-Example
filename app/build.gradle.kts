@@ -51,4 +51,11 @@ dependencies {
 
     //Koin
     implementation (libs.koin.android)
+
+    // Retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.logging.interceptor) // optional but its good to check API calls log
+
+
 }
