@@ -1,4 +1,4 @@
-package com.samir.koinrestapiexample
+package com.samir.koinrestapiexample.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
