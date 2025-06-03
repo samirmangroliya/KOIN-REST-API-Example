@@ -1,6 +1,7 @@
-package com.samir.koinrestapiexample
+package com.samir.koinrestapiexample.app
 
 import android.app.Application
+import com.samir.koinrestapiexample.di.appModule
 import com.samir.koinrestapiexample.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -14,7 +15,7 @@ class MyApp : Application() {
         startKoin {
             androidLogger(Level.INFO)
             androidContext(this@MyApp)
-            modules(listOf(networkModule))
+            modules(listOf(networkModule, appModule))
         }
 
     }
