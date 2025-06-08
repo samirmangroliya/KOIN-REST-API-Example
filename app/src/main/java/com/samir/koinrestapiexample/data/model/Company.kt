@@ -1,4 +1,4 @@
-package com.samir.koinrestapiexample.model
+package com.samir.koinrestapiexample.data.model
 
 data class Company(
     val bs: String?,
