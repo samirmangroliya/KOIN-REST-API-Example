@@ -1,7 +1,7 @@
 package com.samir.koinrestapiexample.di
 
 import com.samir.koinrestapiexample.BuildConfig
-import com.samir.koinrestapiexample.network.UserApiService
+import com.samir.koinrestapiexample.data.apiservice.UserApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -10,12 +10,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 val networkModule = module {
-    single {
-        provideOkHttpClient()
-        provideGsonConverterFactory()
-        provideRetrofit(get(), get())
-        provideUserApiService(get())
-    }
+    single { provideOkHttpClient() }
+    single { provideGsonConverterFactory() }
+    single { provideRetrofit(get(), get()) }
+    single { provideUserApiService(get()) }
 }
 
 fun provideOkHttpClient(): OkHttpClient =

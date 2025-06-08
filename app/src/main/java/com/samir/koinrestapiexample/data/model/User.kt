@@ -1,4 +1,4 @@
-package com.samir.koinrestapiexample.model
+package com.samir.koinrestapiexample.data.model
 
 data class User(
     val address: Address?,
