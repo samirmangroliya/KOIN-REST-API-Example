@@ -2,19 +2,31 @@ package com.samir.koinrestapiexample.presentation.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.samir.koinrestapiexample.R
+import com.samir.koinrestapiexample.data.model.User
 import com.samir.koinrestapiexample.databinding.ActivityMainBinding
+import com.samir.koinrestapiexample.presentation.adapter.UserListAdapter
 import com.samir.koinrestapiexample.presentation.utils.NetworkResult
 import com.samir.koinrestapiexample.presentation.viewmodels.UserViewModel
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
+import org.koin.android.scope.AndroidScopeComponent
+import org.koin.androidx.scope.activityRetainedScope
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AndroidScopeComponent {
 
     private lateinit var binding: ActivityMainBinding
-    private val userViewModel: UserViewModel by inject()
+
+    private var menuFilter: MenuItem? = null
+
+    override val scope by activityRetainedScope()
+    private val userViewModel: UserViewModel by lazy {
+        scope.get()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getData() {
+        userViewModel.getUserData()
         lifecycleScope.launch {
             userViewModel.users.collect {
                 when (it) {
@@ -44,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                     is NetworkResult.Success -> {
                         showLoading(false)
 
+                        setDataToRecyclerView(it.data)
                         Log.d("MainActivity", "Total data ${it.data[0]}::")
                     }
                 }
@@ -51,7 +65,41 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setDataToRecyclerView(data: List<User>) {
+        binding.recyclerview.adapter = UserListAdapter(data)
+        menuFilter?.isVisible = true
+    }
+
     private fun showLoading(isLoading: Boolean) {
         binding.progressbar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    //filter option menu
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+
+        menuFilter = menu?.findItem(R.id.filter)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.filter -> {
+                filterDataOnBaseOfEmail()
+                return true
+            }
+
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+    private fun filterDataOnBaseOfEmail() {
+        if (userViewModel.users.value is NetworkResult.Success) {
+            val listOfUsers = (userViewModel.users.value as NetworkResult.Success).data
+            val filterListByEmail = userViewModel.filterDataByEmail("biz", listOfUsers)
+            setDataToRecyclerView(filterListByEmail)
+        }
     }
 }

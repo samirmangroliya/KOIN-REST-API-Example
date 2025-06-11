@@ -15,11 +15,7 @@ class UserViewModel(val userUseCase: UserUseCase) : ViewModel() {
     val users: StateFlow<NetworkResult<List<User>>>
         get() = _users
 
-    init {
-        getUserData()
-    }
-
-    private fun getUserData() {
+    fun getUserData() {
         viewModelScope.launch {
             try {
                 _users.value = NetworkResult.Loading
@@ -29,5 +25,9 @@ class UserViewModel(val userUseCase: UserUseCase) : ViewModel() {
                 _users.value = NetworkResult.Error(e.message ?: "", e)
             }
         }
+    }
+
+    fun filterDataByEmail(filter: String, userList: List<User>): List<User> {
+        return userUseCase.getFilterDataByEmail(filter, userList)
     }
 }

@@ -1,8 +1,6 @@
 package com.samir.koinrestapiexample.data.model
 
 data class User(
-    val address: Address?,
-    val company: Company?,
     val email: String?,
     val id: Int?,
     val name: String?,
