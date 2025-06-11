@@ -1,14 +1,13 @@
 package com.samir.koinrestapiexample.domain
 
 import com.samir.koinrestapiexample.data.model.User
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class UserUseCase : KoinComponent {
+class UserUseCase(private val userRepository: UserRepository) {
+    suspend fun getUserList(): List<User> {
+        return userRepository.getUserList()
+    }
 
-    private val userRepositoryImpl: UserRepository by inject()
-
-     suspend fun getUserList(): List<User> {
-        return userRepositoryImpl.getUserList()
+    fun getFilterDataByEmail(filter: String, list: List<User>):List<User> {
+        return list.filter { it.email?.endsWith(filter, ignoreCase = true) == true }
     }
 }
