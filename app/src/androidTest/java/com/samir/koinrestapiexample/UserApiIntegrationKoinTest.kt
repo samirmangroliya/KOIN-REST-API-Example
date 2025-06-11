@@ -44,7 +44,7 @@ class UserApiIntegrationKoinTest : KoinTest {
             modules(
                 networkModule,
                 module {
-                    scope<MainActivity> {
+                    scope(named("activityScope")) {
                         scoped<UserRepository> { UserRepositoryImpl(get()) }
                         scoped { UserUseCase(get()) }
                         scoped { UserViewModel(get()) }
@@ -54,13 +54,8 @@ class UserApiIntegrationKoinTest : KoinTest {
         }
 
         // Open the MainActivity scope & get ViewModel
-        val scope = getKoin().createScope("testScopeId", named<MainActivity>())
+        val scope = getKoin().createScope("testScopeId", named("activityScope"))
         viewModel = scope.get()
-    }
-
-    @After
-    fun tearDown() {
-        stopKoin() // clean up Koin context after each test
     }
 
     @Test
@@ -92,5 +87,10 @@ class UserApiIntegrationKoinTest : KoinTest {
                 Assert.fail("Unexpected result type")
             }
         }
+    }
+
+    @After
+    fun tearDown() {
+        stopKoin() // clean up Koin context after each test
     }
 }
