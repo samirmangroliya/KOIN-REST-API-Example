@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.samir.koinrestapiexample.R
 import com.samir.koinrestapiexample.data.model.User
@@ -14,19 +13,14 @@ import com.samir.koinrestapiexample.presentation.adapter.UserListAdapter
 import com.samir.koinrestapiexample.presentation.utils.NetworkResult
 import com.samir.koinrestapiexample.presentation.viewmodels.UserViewModel
 import kotlinx.coroutines.launch
-import org.koin.android.scope.AndroidScopeComponent
-import org.koin.androidx.scope.activityRetainedScope
 
-class MainActivity : AppCompatActivity(), AndroidScopeComponent {
+class MainActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     private var menuFilter: MenuItem? = null
 
-    override val scope by activityRetainedScope()
-    private val userViewModel: UserViewModel by lazy {
-        scope.get()
-    }
+    private val userViewModel: UserViewModel by scope.inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
