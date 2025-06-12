@@ -7,7 +7,7 @@ import org.junit.Before
 import org.junit.Test
 
 
-class FilterUserListTest {
+class FilterUnitTest {
     private lateinit var userUseCase: UserUseCase
 
     @Before
